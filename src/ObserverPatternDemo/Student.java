@@ -7,18 +7,20 @@ public class Student {
 	private String lastName;
 	private String email;
 	private int idNumber;
-	private ArrayList<IObserver> observers;
+	private ObserverManager observers;
+	private ArrayList<Courses> courses = new ArrayList<>();
 	
-	public Student(String firstName, String lastName, int idNumber, String email) {
+	public Student(String firstName, String lastName, int idNumber, String email)
+			{
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.idNumber = idNumber;
 		this.email = email;
-		this.observers = new ArrayList<IObserver>();
+		this.observers = new ObserverManager();
 	}
 	
 	public Student() {
-		this.observers = new ArrayList<IObserver>();
+		this.observers = new ObserverManager();
 	}
 	
 	public String getFirstName() {
@@ -27,9 +29,10 @@ public class Student {
 	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-		notifyAllObservers();
+		notifyAllObservers("firstName");
 	}
 	
+
 	public String getLastName() {
 		return this.lastName;
 	}
@@ -44,27 +47,45 @@ public class Student {
 	
 	public void setIdNumber(int idNumber) {
 		this.idNumber = idNumber;
-		notifyAllObservers();
+		notifyAllObservers("idNumber");
 	}	
 	
+
+
 	public void setEmail(String email) {
 		this.email = email;
-		notifyAllObservers();
+		notifyAllObservers("email");
 	}
 	
 	public String getEmail() {
 		return this.email;
 	}
 	
-	public void attachObserver(IObserver observer) {
-		this.observers.add(observer);
+	public void attachObserver(String Type, IObserver observer) {
+		this.observers.addIObserver(Type, observer);
 	}
 	
-	public void notifyAllObservers() {
-		for(IObserver observer: this.observers) {
-			observer.update(this);
+	public void addCourses(Courses courses) {
+		  if (courses.indexOf(courses) < 0) {
+	            courses.add(courses);
+	            notifyAllObservers("courses");
+	        }
+	    }
+	public void removeCourse(Courses courses) {
+	    if (courses.indexOf(courses) > -1) {
+            courses.remove(courses);
+            notifyAllObservers("courses");
+        }
+    }
+	public ArrayList<Courses> getCourses(){
+		 return this.courses;
+	}
+	
+	
+	
+	public void notifyAllObservers(String Type) {
+		observers.notifyAllObservers(Type, this);
 		}
 	}
 	
 	
-}
